@@ -206,7 +206,7 @@ class _ShopButton extends StatelessWidget {
         Get.toNamed(AppRoutes.shopView);
       },
       child: const Text(
-        'Shop SMS',
+        'Shop SMS New',
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
