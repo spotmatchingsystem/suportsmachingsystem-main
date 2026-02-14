@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_textstyle.dart';
 import '../../../../utills/responsive.dart';
+import '../../../../routes/app_routes.dart';
+
+class SystemColor extends StatelessWidget {
+  const SystemColor({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const HeroSection();
+  }
+}
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -12,202 +24,256 @@ class HeroSection extends StatelessWidget {
     final isMobile = Responsive.isMobile(context);
     final isTablet = Responsive.isTablet(context);
 
-    final content = Column(
+    return Container(
+      width: double.infinity,
+      color: AppColors.background,
+      padding: EdgeInsets.symmetric(
+        horizontal: padding,
+        vertical: isMobile ? 40 : 80,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: Column(
+            children: [
+              if (isMobile)
+                Column(
+                  children: [
+                    const _HeroText(),
+                    const SizedBox(height: 40),
+                    Image.asset(
+                      'assets/images/spotbgimage.png',
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Expanded(flex: 12, child: _HeroText()),
+                    const SizedBox(width: 40),
+                    Expanded(
+                      flex: 11,
+                      child: Image.asset(
+                        'assets/images/spotbgimage.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroText extends StatelessWidget {
+  const _HeroText();
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
-        // Title: "The Spot Matching System v7" (stacked)
         Text(
-          'The Spot',
-          style: (isMobile ? AppTextStyles.h3 : AppTextStyles.h1).copyWith(
-            fontSize: isMobile ? 28 : (isTablet ? 40 : 52),
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-            height: 1.1,
-            letterSpacing: -0.5,
+          'The Spot\nMatching\nSystem v7',
+          style: TextStyle(
+            fontSize: isMobile ? 42 : 64,
+            fontWeight: FontWeight.w900,
+            color: const Color(0xFF7A4A3A),
+            height: 1.0,
           ),
         ),
+        const SizedBox(height: 24),
         Text(
-          'Matching',
-          style: (isMobile ? AppTextStyles.h3 : AppTextStyles.h1).copyWith(
-            fontSize: isMobile ? 28 : (isTablet ? 40 : 52),
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-            height: 1.1,
-            letterSpacing: -0.5,
+          'The world\'s only 3C colour palette - CrossMedia Colour Consistency.',
+          style: TextStyle(
+            fontSize: isMobile ? 16 : 18,
+            fontWeight: FontWeight.w600,
+            color: AppColors.black,
+            height: 1.4,
           ),
         ),
-        Text(
-          'System v7',
-          style: (isMobile ? AppTextStyles.h3 : AppTextStyles.h1).copyWith(
-            fontSize: isMobile ? 28 : (isTablet ? 40 : 52),
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-            height: 1.1,
-            letterSpacing: -0.5,
-          ),
-        ),
-        SizedBox(height: isMobile ? 20 : 28),
-        // First subtitle
-        Text(
-          "The world's only 3C colour palette - CrossMedia Colour Consistency.",
-          style: AppTextStyles.body.copyWith(
-            fontSize: isMobile ? 14 : 17,
-            color: AppColors.textSecondary,
-            height: 1.5,
-          ),
-        ),
-        SizedBox(height: isMobile ? 12 : 16),
-        // Second subtitle
+        const SizedBox(height: 16),
         Text(
           '2,607 CMYK-based colours designed for modern branding, printing, digital media, and real-world screens.',
-          style: AppTextStyles.body.copyWith(
-            fontSize: isMobile ? 14 : 17,
-            color: AppColors.textSecondary,
-            height: 1.5,
+          style: TextStyle(
+            fontSize: isMobile ? 16 : 18,
+            fontWeight: FontWeight.w500,
+            color: AppColors.black,
+            height: 1.4,
           ),
         ),
-        SizedBox(height: isMobile ? 24 : 32),
-        // Buttons
-        Wrap(
-          spacing: 16,
-          runSpacing: 12,
+        const SizedBox(height: 40),
+        Row(
           children: [
             ElevatedButton(
+              onPressed: () => Get.toNamed(AppRoutes.shopView),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.buttonText,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 32,
-                  vertical: isMobile ? 14 : 18,
+                backgroundColor: const Color(0xFF8A5B4F),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 elevation: 0,
               ),
-              onPressed: () {},
-              child: Text(
+              child: const Text(
                 'Shop SMS',
-                style: AppTextStyles.button.copyWith(
-                  fontSize: isMobile ? 14 : 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
+            const SizedBox(width: 16),
             OutlinedButton(
+              onPressed: () {
+                _launchURL(
+                  'https://www.linkedin.com/company/spot-matching-system/',
+                );
+              },
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 32,
-                  vertical: isMobile ? 14 : 18,
+                foregroundColor: const Color(0xFFE5876F),
+                side: const BorderSide(color: Color(0xFFD1CBC8)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              onPressed: () {},
-              child: Text(
-                'Explore the System',
-                style: AppTextStyles.button.copyWith(
-                  fontSize: isMobile ? 14 : 16,
-                  color: AppColors.primary,
-                ),
+              child: const Text(
+                'Follow us on Linkedin',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ],
         ),
       ],
     );
+  }
+}
 
-    final cmykGraphic = ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: isMobile ? 320 : (isTablet ? 380 : 480),
-        maxHeight: isMobile ? 280 : (isTablet ? 360 : 440),
-      ),
-      child: Image.asset(
-        'assets/images/hero_cmyk.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => _CmykPlaceholder(),
-      ),
-    );
+class WhatIsSmsSection extends StatelessWidget {
+  const WhatIsSmsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = Responsive.horizontalPadding(context);
+    final isMobile = Responsive.isMobile(context);
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-        vertical: isMobile ? 40 : (isTablet ? 56 : 72),
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
-      child: isMobile
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                content,
-                const SizedBox(height: 40),
-                Center(child: cmykGraphic),
-              ],
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: isTablet ? 32 : 48),
-                    child: content,
-                  ),
+      color: AppColors.background,
+      padding: EdgeInsets.symmetric(horizontal: padding, vertical: 80),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: isMobile
+              ? Column(
+                  children: [
+                    const _WhatIsSmsText(),
+                    const SizedBox(height: 48),
+                    const _WhatIsSmsGraphic(),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Expanded(
+                      flex: 12,
+                      child: _WhatIsSmsText(),
+                    ), // Increased flex for text
+                    const SizedBox(width: 80),
+                    const Expanded(
+                      flex: 11,
+                      child: _WhatIsSmsGraphic(),
+                    ), // Decreased relative flex for image
+                  ],
                 ),
-                cmykGraphic,
-              ],
-            ),
+        ),
+      ),
     );
   }
 }
 
-/// Simple CMYK bars shown when hero_cmyk.png fails to load.
-class _CmykPlaceholder extends StatelessWidget {
+class _WhatIsSmsText extends StatelessWidget {
+  const _WhatIsSmsText();
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _bar(AppColors.cyan, 'C'),
-        const SizedBox(width: 12),
-        _bar(AppColors.magenta, 'M'),
-        const SizedBox(width: 12),
-        _bar(AppColors.yellow, 'Y'),
-        const SizedBox(width: 12),
-        _bar(AppColors.keyBlack, 'K'),
+        const Text(
+          'What is SMS?',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w800,
+            color: AppColors.black,
+          ),
+        ),
+        const SizedBox(height: 32),
+        const Text(
+          'The Spot Matching System (SMS) is a modern colour system built for the world we live in today — where brands must look consistent on print, web, mobile, social media, packaging, and even low-gamut customer laptops.',
+          style: TextStyle(fontSize: 16, color: AppColors.black, height: 1.6),
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'Traditional spot ink systems rely on special inks. '
+          'SMS doesn\'t. Every SMS colour is defined by a fixed CIELAB value, so your colours stay consistent across print, digital, and real-world screens.',
+          style: TextStyle(fontSize: 16, color: AppColors.black, height: 1.6),
+        ),
+        const SizedBox(height: 16),
+        InkWell(
+          onTap: () {},
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Text(
+                'Learn more about SMS',
+                style: TextStyle(
+                  color: Color(0xFFE5876F),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(Icons.arrow_forward, size: 16, color: Color(0xFFE5876F)),
+            ],
+          ),
+        ),
       ],
     );
   }
+}
 
-  Widget _bar(Color color, String letter) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 32,
-          height: 120,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          letter,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
+class _WhatIsSmsGraphic extends StatelessWidget {
+  const _WhatIsSmsGraphic();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 350),
+        child: Image.asset("assets/images/whatissms.png", fit: BoxFit.contain),
+      ),
     );
+  }
+}
+
+Future<void> _launchURL(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
   }
 }

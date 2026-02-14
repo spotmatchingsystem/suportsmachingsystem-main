@@ -9,38 +9,51 @@ class StatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final padding = Responsive.horizontalPadding(context);
-    final spacing = Responsive.sectionSpacing(context);
     final isMobile = Responsive.isMobile(context);
 
-    return Padding(
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Color(0xFFEFF3F6), // Match background color from screenshot
+        border: Border(
+          top: BorderSide(color: Color(0xFFD1D5DB), width: 0.5),
+          bottom: BorderSide(color: Color(0xFFD1D5DB), width: 0.5),
+        ),
+      ),
       padding: EdgeInsets.symmetric(
         horizontal: padding,
-        vertical: spacing,
+        vertical: 24, // Tighter vertical padding as per screenshot
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: isMobile ? 24 : 48,
-            runSpacing: isMobile ? 24 : 32,
-            alignment: WrapAlignment.center,
-            children: [
-              _StatItem(
-                value: '359M',
-                label: 'Companies Registered',
-              ),
-              _StatItem(
-                value: '15,000+',
-                label: 'SMS Colors',
-              ),
-              _StatItem(
-                value: 'ISO 12647',
-                label: 'Based Standard',
-              ),
-            ],
-          );
-        },
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _StatItem(
+                    value: '359.000.000',
+                    label: 'Company Registered',
+                  ),
+                ),
+                _verticalDivider(),
+                Expanded(
+                  child: _StatItem(value: '15.000', label: 'SMS Colours'),
+                ),
+                _verticalDivider(),
+                Expanded(
+                  child: _StatItem(value: 'ISO 12647', label: 'Based Colour'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Widget _verticalDivider() {
+    return Container(width: 0.5, color: const Color(0xFFD1D5DB));
   }
 }
 
@@ -56,21 +69,25 @@ class _StatItem extends StatelessWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           value,
-          style: (isMobile ? AppTextStyles.h3 : AppTextStyles.statNumber).copyWith(
-            fontSize: isMobile ? 28 : 36,
+          style: TextStyle(
+            fontSize: isMobile ? 24 : 32,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
+            color: const Color(0xFF1F2937), // Darker grey/black
+            height: 1.1,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         Text(
           label,
-          style: AppTextStyles.statLabel.copyWith(
-            fontSize: isMobile ? 12 : 14,
-            color: AppColors.textLight,
+          style: TextStyle(
+            fontSize: isMobile ? 11 : 12,
+            color: const Color(0xFF6B7280), // Muted grey for label
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.2,
           ),
           textAlign: TextAlign.center,
         ),

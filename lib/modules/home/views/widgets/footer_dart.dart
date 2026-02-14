@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_textstyle.dart';
 import '../../../../utills/responsive.dart';
@@ -13,23 +14,266 @@ class Footer extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-        vertical: isMobile ? 24 : 32,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.secondary,
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
+      color: const Color(0xFFEFF3F6),
+      padding: EdgeInsets.symmetric(horizontal: padding, vertical: 60),
       child: Center(
-        child: Text(
-          '© Spot Matching System',
-          style: AppTextStyles.footer.copyWith(
-            fontSize: isMobile ? 12 : 14,
-            color: AppColors.textSecondary,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: Column(
+            children: [
+              if (isMobile)
+                Column(
+                  children: [
+                    const _FooterLeft(),
+                    const SizedBox(height: 48),
+                    const _FooterRight(),
+                  ],
+                )
+              else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Expanded(flex: 1, child: _FooterLeft()),
+                    SizedBox(width: 48),
+                    Expanded(flex: 1, child: _FooterRight()),
+                  ],
+                ),
+              const SizedBox(height: 80),
+              // Bottom Links
+              _BottomLinks(),
+            ],
           ),
         ),
       ),
     );
+  }
+}
+
+class _FooterLeft extends StatelessWidget {
+  const _FooterLeft();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Logo Section
+        const _FooterLogo(),
+        const SizedBox(height: 32),
+        // Follow Card
+        const _FollowNewsCard(),
+      ],
+    );
+  }
+}
+
+class _FooterLogo extends StatelessWidget {
+  const _FooterLogo();
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/images/logo.png',
+      height: 60, // Adjust height as needed
+      fit: BoxFit.contain,
+    );
+  }
+}
+
+class _FollowNewsCard extends StatelessWidget {
+  const _FollowNewsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 340,
+      height: 110,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE5876F),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Image Part
+            Expanded(
+              flex: 2,
+              child: Image.asset(
+                'assets/images/ballongirlimg.png', // The generated balloon image
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    Container(color: Colors.grey[200]),
+              ),
+            ),
+            // Text Part
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Follow SMS News Page',
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () => _launchURL(
+                        'https://www.linkedin.com/company/spotnordic/',
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text(
+                            'Follow',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          Icon(Icons.north_east, color: Colors.white, size: 20),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterRight extends StatelessWidget {
+  const _FooterRight();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'SpotNordic',
+          style: AppTextStyles.h3.copyWith(
+            fontWeight: FontWeight.w800,
+            fontSize: 28,
+            color: const Color(0xFF4A4A4A),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Manufacturer of the Spot Matching System',
+          style: AppTextStyles.bodySmall.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 24),
+        InkWell(
+          onTap: () => _launchURL('https://www.spot-nordic.com'),
+          child: Text(
+            'www.spot-nordic.com',
+            style: AppTextStyles.body.copyWith(
+              color: const Color(0xFF8A4D3D),
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        RichText(
+          text: TextSpan(
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600,
+            ),
+            children: [
+              const TextSpan(text: 'Support- '),
+              WidgetSpan(
+                child: InkWell(
+                  onTap: () =>
+                      _launchURL('mailto:support@spotmatchingsystem.com'),
+                  child: Text(
+                    'support@spotmatchingsystem.com',
+                    style: TextStyle(
+                      color: const Color(0xFFE5876F),
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 32),
+        // LinkedIn Image Link
+        InkWell(
+          onTap: () => _launchURL(
+            'https://www.linkedin.com/company/spot-matching-system/',
+          ),
+          child: Image.asset(
+            'assets/images/linkedin.png',
+            height: 32,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BottomLinks extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final links = ['SMS vs Pantone', 'Legal', 'Terms', 'Privacy'];
+    return Wrap(
+      alignment: WrapAlignment.end,
+      spacing: 32,
+      children: links
+          .map(
+            (link) => InkWell(
+              onTap: () {},
+              child: Text(
+                link,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textSecondary.withOpacity(0.8),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+Future<void> _launchURL(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
   }
 }

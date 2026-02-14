@@ -1,10 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:spotmatchingsystem/modules/home/smsReady/widgets/about_view.dart';
+import 'package:spotmatchingsystem/modules/home/smsReady/widgets/smsready_view.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utills/responsive.dart';
 import '../../controllers/home_controller.dart';
+import '../../../../routes/app_routes.dart';
+import '../../smsReady/widgets/colorSystem_view.dart';
+import '../../smsReady/widgets/fordesign_view.dart';
+import '../../smsReady/widgets/support_view.dart';
+import '../../smsReady/widgets/sustainability_view.dart';
+import '../../smsReady/widgets/whatIsSms_View.dart';
+import '../home_views.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -15,114 +22,126 @@ class NavBar extends StatelessWidget {
 
     final horizontalPadding = Responsive.horizontalPadding(context);
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 20),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return SizedBox(
-            width: constraints.maxWidth,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                /// LOGO (LEFT)
-                SizedBox(
-                  width: 140,
-                  height: 40,
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => _LogoPlaceholder(),
-                  ),
-                ),
+    final currentRoute = Get.currentRoute;
+    final initialIndex = _navTabs.indexWhere(
+      (tab) => tab.route == currentRoute,
+    );
+    if (initialIndex != -1) {
+      controller.currentIndex.value = initialIndex;
+    }
 
-                const SizedBox(width: 16),
+    return Obx(
+      () => DefaultTabController(
+        length: _navTabs.length,
+        initialIndex: controller.currentIndex.value,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: 20,
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = Responsive.isMobile(context);
 
-                /// MENU ITEMS + SHOP BUTTON (desktop)
-                if (!Responsive.isMobile(context))
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, innerConstraints) {
-                        final navWidth = innerConstraints.maxWidth;
-                        const minNavWidth = 400.0;
-                        if (navWidth < minNavWidth) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+              return SizedBox(
+                width: constraints.maxWidth,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        /// LOGO (LEFT)
+                        GestureDetector(
+                          onTap: () => Get.offAllNamed(AppRoutes.home),
+                          child: SizedBox(
+                            width: 140,
+                            height: 40,
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.contain,
+                              errorBuilder: (_, __, ___) => _LogoPlaceholder(),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        /// MENU TABS + SHOP BUTTON (desktop)
+                        if (!isMobile)
+                          Expanded(
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                const NavItem('What is SMS'),
-                                const SizedBox(width: 16),
-                                const NavItem('Colour System'),
-                                const SizedBox(width: 16),
-                                const NavItem('Why Choose SMS'),
-                                const SizedBox(width: 16),
-                                const NavItem('For Designers'),
+                                Flexible(child: _NavTabs()),
                                 const SizedBox(width: 24),
                                 _ShopButton(),
                               ],
                             ),
-                          );
-                        }
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Flexible(
-                              child: Wrap(
-                                spacing: 24,
-                                runSpacing: 8,
-                                alignment: WrapAlignment.end,
-                                children: const [
-                                  NavItem('What is SMS'),
-                                  NavItem('Colour System'),
-                                  NavItem('Why Choose SMS'),
-                                  NavItem('For Designers'),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 24),
-                            _ShopButton(),
-                          ],
-                        );
-                      },
+                          )
+                        else
+                          const Spacer(),
+                        if (isMobile) _ShopButton(),
+                      ],
                     ),
-                  )
-                else
-                  const Spacer(),
-                if (Responsive.isMobile(context)) ...[
-                  _ShopButton(),
-                  IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: controller.toggleMenu,
-                  ),
-                ],
-              ],
-            ),
-          );
-        },
+                    if (isMobile) ...[const SizedBox(height: 12), _NavTabs()],
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 }
 
-class NavItem extends StatelessWidget {
+class _NavTab {
   final String title;
+  final dynamic route;
 
-  const NavItem(this.title, {super.key});
+  const _NavTab(this.title, {this.route});
+}
 
+class _NavTabs extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
+    return TabBar(
+      isScrollable: true,
+      labelColor: Colors.black87,
+      unselectedLabelColor: Colors.black54,
+      indicator: const UnderlineTabIndicator(borderSide: BorderSide.none),
+      dividerColor: Colors.transparent,
+      indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+      tabs: _navTabs.map((tab) => Tab(text: tab.title)).toList(),
+      onTap: (index) {
+        final route = _navTabs[index].route;
+        if (route != null) {
+          if (route is String) {
+            if (Get.currentRoute != route) {
+              Get.offAllNamed(route);
+            }
+          } else if (route is Widget) {
+            Get.to(() => route);
+          }
+        }
+      },
     );
   }
 }
+
+const List<_NavTab> _navTabs = [
+  _NavTab('What is SMS', route: WhatIsSmsView()),
+  _NavTab('Colour System', route: ColourSystemView()),
+  _NavTab('SMS Ready', route: SmsReadyExpertView()),
+  _NavTab('For Designers', route: DesignConfidenceView()),
+  _NavTab('For Brands'),
+  _NavTab('Sustainability', route: SustainabilityView()),
+  _NavTab('About', route: AboutView()),
+  _NavTab('Support', route: SupportView()),
+];
 
 class _LogoPlaceholder extends StatelessWidget {
   @override
@@ -163,10 +182,7 @@ class _LogoPlaceholder extends StatelessWidget {
             ),
             Text(
               'matching system',
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.textLight,
-              ),
+              style: TextStyle(fontSize: 10, color: AppColors.textLight),
             ),
           ],
         ),
@@ -183,20 +199,16 @@ class _ShopButton extends StatelessWidget {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.buttonText,
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 0,
       ),
-      onPressed: () {},
+      onPressed: () {
+        Get.toNamed(AppRoutes.shopView);
+      },
       child: const Text(
         'Shop SMS',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
   }
 }
-

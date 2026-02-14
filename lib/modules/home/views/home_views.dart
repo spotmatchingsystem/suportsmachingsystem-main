@@ -8,6 +8,7 @@ import 'widgets/why_choosesection.dart';
 import 'widgets/explore_section.dart';
 import 'widgets/pricing_section.dart';
 import 'widgets/footer_dart.dart';
+import '../../../themes/app_colors.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -15,19 +16,28 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            NavBar(),
-            HeroSection(),
-            StatsSection(),
-            WhyChooseSection(),
-            ExploreSection(),
-            PricingSection(),
-            Footer(),
-          ],
-        ),
+        child: Column(children: const [NavBar(), HomeContent(), Footer()]),
       ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SystemColor(),
+        StatsSection(),
+        WhatIsSmsSection(),
+        WhyChooseSection(),
+        ExploreSection(),
+        PricingSection(),
+      ],
     );
   }
 }

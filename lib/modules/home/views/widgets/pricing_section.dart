@@ -9,82 +9,195 @@ class PricingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final padding = Responsive.horizontalPadding(context);
-    final spacing = Responsive.sectionSpacing(context);
     final isMobile = Responsive.isMobile(context);
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-        vertical: spacing,
-      ),
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFFEFF3F6),
+      padding: EdgeInsets.symmetric(horizontal: padding),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isMobile ? double.infinity : 400,
-          ),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(isMobile ? 24 : 40),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 2),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.border.withOpacity(0.5),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Column(
+            children: [
+              Text(
+                'SMS READY Expert',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 32 : 42,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.black,
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'SMS Ready Expert',
-                  style: (isMobile ? AppTextStyles.h3 : AppTextStyles.h2).copyWith(
-                    fontSize: isMobile ? 22 : 28,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                SizedBox(height: isMobile ? 16 : 24),
-                Text(
-                  '\$60 / year',
-                  style: AppTextStyles.statNumber.copyWith(
-                    fontSize: isMobile ? 28 : 32,
-                    color: AppColors.primary,
-                  ),
-                ),
-                SizedBox(height: isMobile ? 20 : 28),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.buttonText,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 20 : 28,
-                        vertical: isMobile ? 14 : 18,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
+              ),
+              const SizedBox(height: 48),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(isMobile ? 24 : 40),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
                     ),
-                    onPressed: () {},
-                    child: Text(
-                      'Learn more',
-                      style: AppTextStyles.button.copyWith(
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Become SMS READY Expert',
+                      style: TextStyle(
+                        fontSize: isMobile ? 20 : 24,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF8A4D3D),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Professional training that ensures SMS colours are used and reproduced correctly - from design to print, web, and video.',
+                      style: TextStyle(
                         fontSize: isMobile ? 14 : 16,
+                        color: const Color(0xFF4B5563),
+                        height: 1.5,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 32),
+                    Row(
+                      children: [
+                        const Text(
+                          'Required for',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF8A4D3D),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Container(
+                            height: 0.5,
+                            color: const Color(0xFFD1D5DB),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Wrap(
+                      spacing: 32,
+                      runSpacing: 16,
+                      children: const [
+                        _CheckItem(label: 'SMS READY agencies'),
+                        _CheckItem(label: 'SMS READY print shops'),
+                        _CheckItem(label: 'SMS dealers'),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(32),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9F2EF),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xFFE5D5D0),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Remote training & diploma',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          RichText(
+                            text: const TextSpan(
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF8A4D3D),
+                              ),
+                              children: [
+                                TextSpan(text: '€60'),
+                                TextSpan(
+                                  text: '  EURO',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF9CA3AF),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: 300,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF8A4D3D),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: const Text(
+                                'Learn more',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CheckItem extends StatelessWidget {
+  final String label;
+
+  const _CheckItem({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.check, size: 20, color: Color(0xFF8A4D3D)),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Color(0xFF4B5563),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

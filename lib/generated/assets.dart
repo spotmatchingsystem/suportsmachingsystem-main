@@ -2,6 +2,17 @@
 class Assets {
   Assets._();
 
-  static const String imagesSmslogoimage = 'assets/images/smslogoimage.png';
-
+  static const String assetsAdobe = 'assets/adobe.png';
+  static const String assetsImagesLogo = 'assets/images/logo.png';
+  static const String assetsImagesSpotbgimage = 'assets/images/spotbgimage.png';
+  static const String imagesAffinityimg = 'assets/images/affinityimg.png';
+  static const String imagesArrowimg = 'assets/images/arrowimg.png';
+  static const String imagesBallongirlimg = 'assets/images/ballongirlimg.png';
+  static const String imagesFigma = 'assets/images/figma.png';
+  static const String imagesLinkedin = 'assets/images/linkedin.png';
+  static const String imagesLogo = 'assets/images/logo.png';
+  static const String imagesMordenColorimg = 'assets/images/mordenColorimg.png';
+  static const String imagesSmsreadyimage = 'assets/images/smsreadyimage.png';
+  static const String imagesSpotbgimage = 'assets/images/spotbgimage.png';
+  static const String imagesWhatissms = 'assets/images/whatissms.png';
 }
